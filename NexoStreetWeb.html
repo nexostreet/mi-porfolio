@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexo Street — Tienda Digital</title>
+<style>
+:root {
+  --bg: #0a0f1c;
+  --card: #111827;
+  --accent: #1d4ed8;
+  --accent-glow: #3b82f6;
+  --accent-gradient: linear-gradient(45deg, #1d4ed8, #3b82f6);
+  --muted: #9ca3af;
+  --radius: 16px;
+  --shadow-card: 0 8px 20px rgba(0,0,0,0.5);
+  --shadow-btn: 0 4px 15px rgba(29,78,216,0.6);
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background: var(--bg);
+  color: #f9fafb;
+  margin: 0;
+}
+
+/* Navbar */
+.navbar {
+  background: #0f172a;
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; }
+.logo span { color: var(--accent-glow); }
+.nav-links { list-style: none; display: flex; gap: 22px; margin: 0; padding: 0; }
+.nav-links a { color: #fff; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--accent-glow); }
+.nav-toggle { display: none; background: none; border: none; font-size: 1.8rem; color: white; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg,#0f172a,#1e3a8a);
+  text-align: center; padding: 100px 20px;
+  box-shadow: inset 0 -20px 60px rgba(0,0,0,0.6);
+}
+.hero h1 { font-size: 3rem; font-weight: 700; }
+.hero h1 span { color: var(--accent-glow); }
+.hero p { font-size: 1.2rem; margin-top: 16px; }
+.hero .btn { margin-top: 24px; background: var(--accent-gradient); padding: 14px 28px; font-weight: 600; font-size: 1rem; border-radius: var(--radius); box-shadow: var(--shadow-btn); transition: all 0.3s ease; }
+.hero .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.8); }
+
+/* Secciones */
+.section { padding: 80px 20px; }
+.section h2 { margin-bottom: 30px; font-size: 2rem; font-weight: 700; text-align: center; }
+
+/* Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 24px; }
+
+/* Card */
+.card { background: var(--card); padding: 20px; border-radius: var(--radius); border: 1px solid #1e293b; box-shadow: var(--shadow-card); transition: transform 0.3s, box-shadow 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(29,78,216,0.7); }
+.card img { width: 100%; border-radius: var(--radius); margin-top: 12px; }
+
+/* Botones */
+.btn { background: var(--accent-gradient); color: white; border: none; padding: 12px 20px; border-radius: var(--radius); cursor: pointer; font-weight: 600; box-shadow: var(--shadow-btn); transition: all 0.3s ease; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.8); }
+.btn.secondary { background: transparent; border: 2px solid var(--accent-glow); color: var(--accent-glow); }
+.btn.secondary:hover { background: var(--accent-glow); color: #fff; box-shadow: 0 6px 20px rgba(59,130,246,0.5); }
+
+/* Modal */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
+.modal { background: #1f2937; border-radius: var(--radius); padding: 24px; width: 100%; max-width: 650px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); }
+.modal-footer { margin-top: 12px; text-align: right; }
+
+/* Variantes */
+.variant-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap: 16px; }
+.variant-card { background: #1a202c; padding: 12px; border-radius: var(--radius); text-align: center; border: 1px solid #1e293b; transition: all 0.3s; cursor: pointer; }
+.variant-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(59,130,246,0.6); border: 2px solid var(--accent-glow); }
+
+/* Footer */
+.site-footer { background: #0f172a; padding: 24px; text-align: center; font-size: 0.9rem; color: var(--muted); }
+
+/* Responsive */
+@media (max-width:768px) {
+  .nav-links { flex-direction: column; background: #111827; position: absolute; top:70px; right:0; display:none; padding:12px; }
+  .nav-links.show { display:flex; }
+  .nav-toggle { display:block; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container nav-inner">
+    <div class="logo">Nexo <span>Street</span></div>
+    <button id="nav-toggle" class="nav-toggle">☰</button>
+    <ul id="nav-menu" class="nav-links">
+      <li><a href="#home">Inicio</a></li>
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#nosotros">Sobre Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+      <li><button id="open-cart" class="btn small">🛒 Carrito <span id="cart-count" class="badge">0</span></button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header id="home" class="hero">
+  <div class="container hero-inner">
+    <h1>Bienvenido a <span>Nexo Street</span></h1>
+    <p>Creación de páginas web, aplicaciones, videojuegos y productos digitales de alta calidad.</p>
+    <a href="#productos" class="btn">Explorar productos</a>
+  </div>
+</header>
+
+<!-- Productos -->
+<section id="productos" class="container section">
+  <h2>Productos destacados</h2>
+  <div id="products" class="grid"></div>
+</section>
+
+<!-- Servicios -->
+<section id="servicios" class="container section">
+  <h2>Servicios personalizados</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Diseño Web</h3>
+      <p>Landing pages, tiendas online, blogs y portales corporativos adaptados a tu negocio.</p>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEmRlFb-mfc6Ad0YY0GheBFDq61y9vWx3p_w&s" alt="Páginas Web" />
+    </div>
+    <div class="card">
+      <h3>Aplicaciones</h3>
+      <p>Apps móviles y de escritorio con integración de APIs y sistemas modernos.</p>
+      <img src="https://grupovierci.brightspotcdn.com/dims4/default/2658439/2147483647/strip/true/crop/1180x664+0+109/resize/1000x563!/quality/90/?url=https%3A%2F%2Fk2-prod-grupo-vierci.s3.us-east-1.amazonaws.com%2Fbrightspot%2Fadjuntos%2F161%2Fimagenes%2F010%2F996%2F0010996977.png" alt="APPS.png" />
+    </div>
+    <div class="card">
+      <h3>Videojuegos</h3>
+      <p>Desarrollo de videojuegos indie, educativos o empresariales con mecánicas atractivas.</p>
+      <img src="https://i.ytimg.com/vi/ToJHzrKqkP0/maxresdefault.jpg" alt="Videojuegos" />
+    </div>
+  </div>
+</section>
+
+<!-- Sobre nosotros -->
+<section id="nosotros" class="container section">
+  <h2>Sobre nosotros</h2>
+  <p>
+    En <strong>Nexo Street</strong> creemos en la unión entre creatividad y tecnología.
+    Nuestro equipo crea productos digitales modernos, escalables y únicos.
+  </p>
+  <p>
+    🚀 Nexo Street es una empresa de desarrollo tecnológico dirigida por un profesional independiente 💻, especializado en todo tipo de programación.
+    Ofrecemos soluciones personalizadas 🌐 que van desde aplicaciones web y móviles 📱💻, hasta sistemas a medida 🛠️ y automatización de procesos ⚙️.
+  </p>
+  <p>
+    En Nexo Street, cada proyecto recibe atención directa 👨‍💻 y compromiso total 💯, garantizando un trabajo eficiente, creativo 🎨 y adaptado a las necesidades de cada cliente 🤝.
+    Nuestro enfoque versátil permite transformar ideas 💡 en productos funcionales y modernos ✨, conectando innovación y tecnología de manera efectiva 🔗.
+  </p>
+</section>
+
+<!-- Contacto -->
+<section id="contacto" class="container section">
+  <h2>Contacto</h2>
+  <div class="contact-footer">
+    <div class="contact-card">
+      <h3>¿Tienes un proyecto en mente?</h3>
+      <p>En Nexo Street estamos listos para ayudarte a llevar tu idea al siguiente nivel 🚀</p>
+      <ul>
+        <li>📧 <a href="mailto:nexostreet2025@gmail.com">nexostreet2025@gmail.com</a></li>
+        <li>📱 <a href="tel:+34613080436">+34 613 080 436</a></li>
+        <li>🌐 www.nexostreet.com</li>
+      </ul>
+      <a href="#contact-form" class="btn">Enviar mensaje</a>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Carrito -->
+<div id="modal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal">
+    <div id="modal-content"></div>
+    <div class="modal-footer">
+      <button id="close-modal" class="btn secondary">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <small>© 2025 Nexo Street — Demo educativa (Pagos simulados PayPal/Bizum)</small>
+  </div>
+</footer>
+
+<script>
+const PRODUCTS = [
+  { id:"web-pages", title:"Páginas Web", price:79, desc:"Landing pages, sitios corporativos, blogs y tiendas online.", variants:[{id:"basic", name:"Básico", price:79},{id:"pro", name:"Profesional", price:120}]},
+  { id:"unity-game", title:"Desarrollo de juegos en Unity", price:60, desc:"Creación de videojuegos 2D/3D con Unity.", variants:[{id:"2d", name:"Juego 2D", price:60},{id:"3d", name:"Juego 3D", price:100}]},
+  { id:"roblox-game", title:"Desarrollo de juegos en Roblox Studio", price:50, desc:"Prototipos y juegos completos para Roblox.", variants:[{id:"basic", name:"Prototipo", price:50},{id:"full", name:"Juego completo", price:90}]},
+  { id:"mobile-game", title:"Desarrollo de juegos para móvil", price:70, desc:"Apps y juegos móviles para Android/iOS.", variants:[{id:"android", name:"Android", price:70},{id:"ios", name:"iOS", price:70},{id:"cross", name:"Cross-platform", price:120}]}
+];
+const cart = {};
+const fmt = n=>"€"+n.toFixed(2);
+
+function renderProducts(){
+  const el=document.getElementById("products");
+  el.innerHTML="";
+  PRODUCTS.forEach(p=>{
+    const node=document.createElement("div");
+    node.className="card";
+    node.innerHTML=`<h3>${p.title}</h3><p>${p.desc}</p><div class="price">${fmt(p.price)}</div><div class="actions"><button class="btn select-variant" data-id="${p.id}">Elegir variante</button></div>`;
+    el.appendChild(node);
+  });
+  document.querySelectorAll(".select-variant").forEach(btn=>btn.addEventListener("click",()=>openVariantModal(btn.dataset.id)));
+}
+
+function openModal(html){
+  document.getElementById("modal-content").innerHTML=html;
+  const mb=document.getElementById("modal");
+  mb.style.display="flex"; mb.setAttribute("aria-hidden","false");
+}
+function closeModal(){const mb=document.getElementById("modal"); mb.style.display="none"; mb.setAttribute("aria-hidden","true");}
+document.getElementById("close-modal").addEventListener("click",closeModal);
+
+function openVariantModal(productId){
+  const product=PRODUCTS.find(p=>p.id===productId); if(!product) return;
+  let html=`<h3>${product.title}</h3><p>${product.desc}</p><div class="variant-grid">`;
+  product.variants.forEach(v=>{html+=`<div class="variant-card" data-id="${v.id}"><h4>${v.name}</h4><p>Precio: ${fmt(v.price)}</p></div>`});
+  html+=`</div><div style="margin-top:20px;"><button class="btn" id="add-selected">Añadir al carrito</button><button class="btn secondary" id="cancel-variant">Cancelar</button></div>`;
+  openModal(html);
+  let selectedVariant=product.variants[0].id;
+  document.querySelectorAll(".variant-card").forEach(c=>c.addEventListener("click",()=>{document.querySelectorAll(".variant-card").forEach(cc=>cc.style.border="1px solid #1e293b"); c.style.border="2px solid var(--accent-glow)"; selectedVariant=c.dataset.id}));
+  document.getElementById("add-selected").addEventListener("click",()=>{addToCart(productId,selectedVariant); closeModal();});
+  document.getElementById("cancel-variant").addEventListener("click",closeModal);
+}
+
+function keyFor(productId, variantId){return `${productId}::${variantId}`;}
+function addToCart(productId, variantId){
+  const p=PRODUCTS.find(x=>x.id===productId); if(!p) return;
+  const v=p.variants.find(x=>x.id===variantId)||p.variants[0];
+  const k=keyFor(productId,variantId);
+  if(!cart[k]) cart[k]={product:p,variant:v,qty:0};
+  cart[k].qty+=1;
+  updateCartCount();
+}
+function updateCartCount(){
+  const count=Object.values(cart).reduce((s,i)=>s+i.qty,0);
+  document.getElementById("cart-count").textContent=count;
+}
+
+// Navbar toggle
+document.getElementById("nav-toggle").addEventListener("click",()=>{
+  document.getElementById("nav-menu").classList.toggle("show");
+});
+
+document.addEventListener("DOMContentLoaded", renderProducts);
+</script>
+</body>
+</html>
